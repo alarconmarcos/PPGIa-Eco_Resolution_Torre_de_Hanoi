@@ -1,7 +1,7 @@
 import tkinter as tk
 from interface import InterfaceHanoi
 
-discos = 4  # Número de discos para a Torre de Hanói
+discos = 3  # Número de discos para a Torre de Hanói
 
 def main():
     root = tk.Tk() # Cria a janela principal
