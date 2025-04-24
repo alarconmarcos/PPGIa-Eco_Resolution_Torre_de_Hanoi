@@ -38,25 +38,25 @@ class Ambiente:
 
     def mover_disco(self, agente):
         with self.lock:
-            if self.movimentos.empty():
+            if self.movimentos.empty(): # Verifica se há movimentos pendentes
                 return True, None
 
-            disco, origem, destino = self.movimentos.queue[0]
+            disco, origem, destino = self.movimentos.queue[0] # Obtém o próximo movimento
 
             # Verifica se é o disco correto e se ele está no topo da torre
             if int(agente.nome.split()[1]) != disco:
                 return False, self.encontrar_agente_por_disco(disco)
 
             if self.torres[origem][-1] != disco:
-                return False, self.encontrar_agente_por_disco(self.torres[origem][-1])
+                return False, self.encontrar_agente_por_disco(self.torres[origem][-1]) # Disco não está no topo
 
             # Realiza o movimento
-            self.torres[origem].pop()
-            self.torres[destino].append(disco)
-            self.movimentos.get()
-            self.gui.atualizar_torres(self.torres)
+            self.torres[origem].pop() # Remove o disco da torre de origem
+            self.torres[destino].append(disco) # Adiciona o disco à torre de destino
+            self.movimentos.get() # Remove o movimento da fila
+            self.gui.atualizar_torres(self.torres) # Atualiza a interface gráfica
             time.sleep(0.2)  # pequena pausa para visualização
-            self.registrar(f"[Ambiente]: {agente.nome} moveu o disco {disco} de {origem} para {destino}")
+            self.registrar(f"[Ambiente]: {agente.nome} moveu o disco {disco} de {origem} para {destino}") # Log do movimento
             return True, None
 
     def fugir(self, agente):
