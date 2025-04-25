@@ -2,23 +2,31 @@ import threading
 import time
 from queue import Queue
 from agente import Agente
+from config import Torre_Origem, Torre_Destino, Torre_Auxiliar
+
 
 # === CLASSE AMBIENTE (Controle Lógico da Torre) ===
 class Ambiente:
     def __init__(self, num_discos, gui):
         self.num_discos = num_discos
-        self.torre_objetivo = 'C'
+        self.torre_objetivo = Torre_Destino
         self.gui = gui
         self.inicializar_ambiente()
 
     def inicializar_ambiente(self):
         # Define as torres e cria os agentes
-        self.torres = {'A': list(range(self.num_discos, 0, -1)), 'B': [], 'C': []}
+        torres_iniciais = {
+        'A': {'A': list(range(self.num_discos, 0, -1)), 'B': [], 'C': []},
+        'B': {'A': [], 'B': list(range(self.num_discos, 0, -1)), 'C': []},
+        'C': {'A': [], 'B': [], 'C': list(range(self.num_discos, 0, -1))}
+        }
+        self.torres = torres_iniciais[Torre_Origem]  # Inicializa a torre de origem
+        
         self.movimentos = Queue()
         self.lock = threading.Lock()
         self.mensagens_log = []
         self.agentes = [Agente(f"Disco {i}", self.torre_objetivo, self) for i in range(1, self.num_discos + 1)]
-        self.resolver(self.num_discos, 'A', 'C', 'B')
+        self.resolver(self.num_discos, Torre_Origem, Torre_Destino, Torre_Auxiliar)
 
     def reiniciar(self):
         self.gui.limpar_log()
@@ -30,7 +38,7 @@ class Ambiente:
     def resolver(self, n, origem, destino, auxiliar):
         # Gera a sequência de movimentos da Torre de Hanói
         if n == 1:
-            self.movimentos.put((n, origem, destino))
+            self.movimentos.put((n, origem, destino)) 
         else:
             self.resolver(n-1, origem, auxiliar, destino)
             self.movimentos.put((n, origem, destino))
