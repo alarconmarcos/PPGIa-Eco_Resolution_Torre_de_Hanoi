@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from ambiente import Ambiente
 
+
 class InterfaceHanoi:
     def __init__(self, root, num_discos):
         self.root = root
@@ -45,7 +46,8 @@ class InterfaceHanoi:
 
     def atualizar_log(self, mensagem):
         self.caixa_log.insert(tk.END, mensagem + "\n")
-        self.caixa_log.see(tk.END)
+        self.caixa_log.see(tk.END) # rola para o final
+#        self.root.update_idletasks() # Atualiza a interface gráfica para mostrar o novo log
 
     def limpar_log(self):
         self.caixa_log.delete(1.0, tk.END)

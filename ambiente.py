@@ -22,11 +22,11 @@ class Ambiente:
         }
         self.torres = torres_iniciais[Torre_Origem]  # Inicializa a torre de origem
         
-        self.movimentos = Queue()
-        self.lock = threading.Lock()
+        self.movimentos = Queue() # Fila para armazenar os movimentos
+        self.lock = threading.Lock() # Lock para controle de acesso à fila
         self.mensagens_log = []
-        self.agentes = [Agente(f"Disco {i}", self.torre_objetivo, self) for i in range(1, self.num_discos + 1)]
-        self.resolver(self.num_discos, Torre_Origem, Torre_Destino, Torre_Auxiliar)
+        self.agentes = [Agente(f"Disco {i}", self.torre_objetivo, self) for i in range(1, self.num_discos + 1)] # Cria os agentes (discos)
+        self.resolver(self.num_discos, Torre_Origem, Torre_Destino, Torre_Auxiliar) # Gera a sequência de movimentos
 
     def reiniciar(self):
         self.gui.limpar_log()
@@ -39,10 +39,12 @@ class Ambiente:
         # Gera a sequência de movimentos da Torre de Hanói
         if n == 1:
             self.movimentos.put((n, origem, destino)) 
+#            self.registrar(f"[Ambiente]: Previsão de movimentos: Disco {n} de {origem} para {destino}") # Log do movimento
         else:
-            self.resolver(n-1, origem, auxiliar, destino)
-            self.movimentos.put((n, origem, destino))
-            self.resolver(n-1, auxiliar, destino, origem)
+            self.resolver(n-1, origem, auxiliar, destino) 
+            self.movimentos.put((n, origem, destino)) 
+#            self.registrar(f"[Ambiente]: Previsão de movimentos: Disco {n} de {origem} para {destino}") # Log do movimento
+            self.resolver(n-1, auxiliar, destino, origem)  
 
     def mover_disco(self, agente):
         with self.lock:
@@ -63,7 +65,7 @@ class Ambiente:
             self.torres[destino].append(disco) # Adiciona o disco à torre de destino
             self.movimentos.get() # Remove o movimento da fila
             self.gui.atualizar_torres(self.torres) # Atualiza a interface gráfica
-            time.sleep(0.2)  # pequena pausa para visualização
+ #           time.sleep(0.2)  # pequena pausa para visualização
             self.registrar(f"[Ambiente]: {agente.nome} moveu o disco {disco} de {origem} para {destino}") # Log do movimento
             return True, None
 
