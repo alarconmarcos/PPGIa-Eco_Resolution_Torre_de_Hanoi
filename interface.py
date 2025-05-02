@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 from ambiente import Ambiente
+from config import N_discos
 
 
 class InterfaceHanoi:
@@ -47,13 +48,11 @@ class InterfaceHanoi:
     def atualizar_log(self, mensagem):
         self.caixa_log.insert(tk.END, mensagem + "\n")
         self.caixa_log.see(tk.END) # rola para o final
-#        self.root.update_idletasks() # Atualiza a interface gráfica para mostrar o novo log
 
     def limpar_log(self):
         self.caixa_log.delete(1.0, tk.END)
 
     def proximo_passo(self):
-        # Executa um passo por clique — apenas um agente age
         self.atualizar_log("\n--- Próximo passo ---\n")
         for agente in self.agentes:
             if not agente.objetivo_satisfeito():
@@ -62,7 +61,11 @@ class InterfaceHanoi:
 
         if self.todos_os_objetivos_concluidos():
             self.atualizar_log("\n====================")
-            self.atualizar_log("[Sistema]: Todos os discos alcançaram o objetivo final.")
+            self.atualizar_log("Todos os discos alcançaram o objetivo final.")
+            
+            total_movimentos = (2 ** N_discos) - 1  # Fórmula para calcular o total de movimentos
+            self.atualizar_log(f"Resolução concluída com {total_movimentos} movimentos.")
+
             self.root.after(100, self.perguntar_reinicio)
 
     def todos_os_objetivos_concluidos(self):

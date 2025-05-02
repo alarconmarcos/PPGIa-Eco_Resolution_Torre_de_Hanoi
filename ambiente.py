@@ -33,7 +33,7 @@ class Ambiente:
         self.inicializar_ambiente()
         self.gui.agentes = self.agentes
         self.gui.atualizar_torres(self.torres)
-        self.registrar("[Ambiente]: Torre de Hanói reiniciada.")
+        self.registrar("Torre de Hanói reiniciada.")
 
     def resolver(self, n, origem, destino, auxiliar):
         # Gera a sequência de movimentos da Torre de Hanói
@@ -42,9 +42,9 @@ class Ambiente:
         else:
             self.resolver(n-1, origem, auxiliar, destino) 
             self.movimentos.put((n, origem, destino)) 
-            self.resolver(n-1, auxiliar, destino, origem)  
-        
-#        self.registrar(f"[Ambiente]: Previsão de movimentos: Disco {n} de {origem} para {destino}") # Prévia dos movimentos
+            self.resolver(n-1, auxiliar, destino, origem) 
+            
+#        self.registrar(f"Previsão de movimentos: Disco {n} de {origem} para {destino}") # Prévia dos movimentos
 
     def mover_disco(self, agente):
         with self.lock:
@@ -66,7 +66,8 @@ class Ambiente:
             self.movimentos.get() # Remove o movimento da fila
             self.gui.atualizar_torres(self.torres) # Atualiza a interface gráfica
  #           time.sleep(0.2)  # pequena pausa para visualização
-            self.registrar(f"[Ambiente]: Disco {disco} movido de {origem} para {destino}") # Log do movimento
+            self.registrar(f"Disco {disco} movido de {origem} para {destino}") # Log do movimento
+
             return True, None
 
     def fugir(self, agente):
