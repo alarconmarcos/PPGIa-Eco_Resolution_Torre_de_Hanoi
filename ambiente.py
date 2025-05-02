@@ -5,7 +5,7 @@ from agente import Agente
 from config import Torre_Origem, Torre_Destino, Torre_Auxiliar
 
 
-# === CLASSE AMBIENTE (Controle Lógico da Torre) ===
+# Controle Lógico da Torre de Hanói
 class Ambiente:
     def __init__(self, num_discos, gui):
         self.num_discos = num_discos
@@ -39,12 +39,12 @@ class Ambiente:
         # Gera a sequência de movimentos da Torre de Hanói
         if n == 1:
             self.movimentos.put((n, origem, destino)) 
-#            self.registrar(f"[Ambiente]: Previsão de movimentos: Disco {n} de {origem} para {destino}") # Log do movimento
         else:
             self.resolver(n-1, origem, auxiliar, destino) 
             self.movimentos.put((n, origem, destino)) 
-#            self.registrar(f"[Ambiente]: Previsão de movimentos: Disco {n} de {origem} para {destino}") # Log do movimento
             self.resolver(n-1, auxiliar, destino, origem)  
+        
+#        self.registrar(f"[Ambiente]: Previsão de movimentos: Disco {n} de {origem} para {destino}") # Prévia dos movimentos
 
     def mover_disco(self, agente):
         with self.lock:
@@ -66,7 +66,7 @@ class Ambiente:
             self.movimentos.get() # Remove o movimento da fila
             self.gui.atualizar_torres(self.torres) # Atualiza a interface gráfica
  #           time.sleep(0.2)  # pequena pausa para visualização
-            self.registrar(f"[Ambiente]: {agente.nome} moveu o disco {disco} de {origem} para {destino}") # Log do movimento
+            self.registrar(f"[Ambiente]: Disco {disco} movido de {origem} para {destino}") # Log do movimento
             return True, None
 
     def fugir(self, agente):
